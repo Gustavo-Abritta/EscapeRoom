@@ -3,71 +3,125 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verificação de Acesso</title>
+    <title>TERMINAL DE ACESSO</title>
     <style>
-        /* CSS para estilizar a página */
+        /* CSS para o tema de espião */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes textGlitch {
+            0% { text-shadow: 0.5px 0.5px 0 #ff0000, -0.5px -0.5px 0 #00ff00; }
+            25% { text-shadow: -0.5px 0.5px 0 #ff0000, 0.5px -0.5px 0 #00ff00; }
+            50% { text-shadow: 0.5px -0.5px 0 #ff0000, -0.5px 0.5px 0 #00ff00; }
+            75% { text-shadow: -0.5px -0.5px 0 #ff0000, 0.5px 0.5px 0 #00ff00; }
+            100% { text-shadow: 0.5px 0.5px 0 #ff0000, -0.5px -0.5px 0 #00ff00; }
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            background-color: #f0f2f5;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #0d0d0d; /* Fundo preto/cinza muito escuro */
+            color: #00ff41; /* Cor principal do texto (verde hacker) */
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            text-shadow: 0 0 5px rgba(0, 255, 65, 0.5); /* Efeito de brilho no texto */
+            overflow: hidden; /* Esconde as barras de rolagem */
+        }
+        
+        /* Efeito de linhas de scan (scanlines) no fundo */
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 1px, transparent 1px, transparent 4px);
+            pointer-events: none;
+            z-index: 1;
         }
 
         .login-container {
-            background-color: #ffffff;
+            background-color: rgba(10, 25, 10, 0.3); /* Fundo do container semi-transparente */
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 2px solid #00ff41;
+            box-shadow: 0 0 25px rgba(0, 255, 65, 0.4); /* Sombra como se fosse um brilho */
             text-align: center;
-            width: 320px;
+            width: 380px;
+            animation: fadeIn 1s ease-out;
+            z-index: 2; /* Garante que o container fique acima das scanlines */
         }
 
         h1 {
-            color: #1c1e21;
-            margin-bottom: 20px;
-            font-size: 24px;
+            color: #ffffff;
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            animation: textGlitch 150ms infinite; /* Animação de "glitch" no título */
         }
 
         p {
-            color: #606770;
-            margin-bottom: 25px;
+            color: #00ff41;
+            margin-bottom: 30px;
+            font-size: 14px;
         }
 
         #password-input {
             width: 100%;
             padding: 12px;
-            border: 1px solid #dddfe2;
-            border-radius: 6px;
-            box-sizing: border-box; /* Garante que o padding não afete a largura total */
-            margin-bottom: 15px;
-            font-size: 16px;
+            background-color: #0a0a0a;
+            border: 1px solid #00ff41;
+            border-radius: 0; /* Bordas retas para um look mais "terminal" */
+            box-sizing: border-box;
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #00ff41;
+            font-family: 'Courier New', Courier, monospace;
+            text-align: center;
+        }
+
+        #password-input::placeholder {
+            color: rgba(0, 255, 65, 0.5);
+        }
+
+        #password-input:focus {
+            outline: none;
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.6);
         }
 
         button {
             width: 100%;
             padding: 12px;
-            background-color: #1877f2;
-            color: #ffffff;
-            border: none;
-            border-radius: 6px;
+            background-color: transparent;
+            color: #00ff41;
+            border: 2px solid #00ff41;
+            border-radius: 0;
             font-size: 18px;
             font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+            text-transform: uppercase;
+            letter-spacing: 2px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, color 0.3s, box-shadow 0.3s;
         }
 
         button:hover {
-            background-color: #166fe5;
+            background-color: #00ff41;
+            color: #0d0d0d; /* Cor do texto muda para preto no hover */
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.7);
         }
 
         #error-message {
-            color: #fa3e3e;
-            margin-top: 10px;
+            color: #ff4136; /* Vermelho para erro, bem visível no fundo escuro */
+            margin-top: 15px;
             font-size: 14px;
-            height: 20px; /* Deixa um espaço reservado para a mensagem */
+            height: 20px;
+            text-shadow: 0 0 5px #ff4136;
         }
     </style>
 </head>
@@ -75,18 +129,19 @@
 
     <div class="login-container">
         <h1>Acesso Restrito</h1>
-        <p>Por favor, insira a senha para continuar.</p>
+        <p>AUTENTICAÇÃO NECESSÁRIA</p>
         
         <form id="login-form">
-            <input type="password" id="password-input" placeholder="Digite sua senha aqui" required>
-            <button type="submit">Desbloquear</button>
+            <input type="password" id="password-input" placeholder="[INSIRA O CÓDIGO DE ACESSO]" required>
+            <button type="submit">TRANSMITIR</button>
         </form>
 
         <p id="error-message"></p>
     </div>
 
     <script>
-        // JavaScript para a lógica da senha
+        // O CÓDIGO JAVASCRIPT NÃO PRECISA DE MUDANÇAS
+        // A LÓGICA DE SENHA E REDIRECIONAMENTO CONTINUA A MESMA
 
         // 1. Defina sua senha secreta aqui
         const senhaCorreta = "segredo123";
@@ -113,7 +168,7 @@
                 window.location.href = proximaPagina;
             } else {
                 // Se estiver errada, mostra uma mensagem de erro
-                errorMessage.textContent = "Senha incorreta. Tente novamente.";
+                errorMessage.textContent = ">> CÓDIGO INVÁLIDO. ACESSO NEGADO. <<";
                 // Limpa o campo de senha
                 passwordInput.value = "";
             }
